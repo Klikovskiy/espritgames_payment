@@ -1,0 +1,31 @@
+{% extends "base_temp.html" %}
+
+{% block title %}
+    <title>Баланс кошелька</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card text-center shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4>{{ username|capfirst }}, здравствуйте!</h4>
+                </div>
+                <div class="card-body">
+                    <h1 class="display-4">{{ balance }} ₽</h1>
+                    <p class="text-muted">Текущий баланс вашего кошелька</p>
+                </div>
+                <div class="card-footer text-muted">
+                    Последнее обновление: {{ balance_update_time }}
+                </div>
+                <div class="card-body">
+                    <!-- Кнопка выхода -->
+                    <form method="post" action="{% url 'user_auth:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Выход</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'drf_yasg',
     'core.apps.CoreConfig',
     'wallet.apps.WalletConfig',
     'user_auth.apps.AuthConfig',

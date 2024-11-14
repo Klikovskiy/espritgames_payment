@@ -32,11 +32,18 @@
     ```
 
 
+### Для локальных тестов можно использовать Docker:
+1. Переходим в папку `cd deploy/docker/`
+2. Собираем: `docker-compose -f docker-compose.yml build`
+3. Запускам: `docker-compose -f docker-compose.yml up -d`
+4. Подключаемся к контейнеру Django: `docker exec -it <container_id_or_name> /bin/bash`
+5. Запускаем процедуру создания супер пользователя `python backend/manage.py createsuperuser`
+
 После запуска, проект доступен по адресам:
 
-* http://127.0.0.1:8000 - Основной домен.
-* http://127.0.0.1:8000/api/wallet/redoc/ - Документация API Redoc.
-* http://127.0.0.1:8000/api/wallet/swagger/ - Документация API Swagger.
+* http://localhost/ - Основной домен.
+* http://localhost/api/wallet/redoc/ - Документация API Redoc.
+* http://localhost/api/wallet/swagger/ - Документация API Swagger.
 
 
 Для работы с API, потребуется токен. JWT токен можно получить и обновить через соответствующий метод, который

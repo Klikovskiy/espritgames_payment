@@ -21,12 +21,6 @@
     #### Пример файла конфигурации:
     ```
     DJANGO_SECRET_KEY=''
-    DATABASE_NAME=''
-    DATABASE_USER=''
-    DATABASE_PASSWORD=''
-    DATABASE_HOST=''
-    DATABASE_HOST='localhost'
-    DATABASE_PORT='5432'
     DJANGO_ALLOWED_HOSTS='localhost,127.0.0.1'
     DEBUG=1
     ```

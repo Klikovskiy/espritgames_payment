@@ -2,6 +2,10 @@ from django.urls import path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from wallet.views import WalletBalanceView, WalletWithdrawView, WalletDepositView, WalletRefundView
 
@@ -19,6 +23,8 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('balance/', WalletBalanceView.as_view(), name='wallet-balance'),
     path('deposit/', WalletDepositView.as_view(), name='wallet-deposit'),
     path('withdraw/', WalletWithdrawView.as_view(), name='wallet-withdraw'),

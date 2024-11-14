@@ -1,24 +1,45 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils.timezone import now
+from django.shortcuts import render
 from django.views.generic import View
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.shortcuts import render
+
 from .serializers import WalletSerializer, TransactionSerializer
 
 
 class WalletBalanceView(APIView):
     """
     API endpoint для проверки баланса кошелька пользователя.
-
-    Методы:
-    - get: Возвращает текущий баланс кошелька аутентифицированного пользователя.
     """
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        responses={
+            200: openapi.Response(
+                description="Успешный запрос баланса",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'balance': openapi.Schema(type=openapi.TYPE_NUMBER, example=100.00),
+                    }
+                )
+            ),
+            401: openapi.Response(
+                description="Неавторизованный запрос",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(type=openapi.TYPE_STRING, example="Учетные данные не были предоставлены."),
+                    }
+                )
+            ),
+        }
+    )
     def get(self, request: Request) -> Response:
         """
         Получить баланс пользователя.
@@ -37,12 +58,43 @@ class WalletBalanceView(APIView):
 class WalletDepositView(APIView):
     """
     API endpoint для пополнения баланса кошелька пользователя.
-
-    Методы:
-    - post: Принимает сумму для пополнения и обновляет баланс пользователя.
     """
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        request_body=TransactionSerializer,
+        responses={
+            200: openapi.Response(
+                description="Успешное пополнение баланса",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'status': openapi.Schema(type=openapi.TYPE_STRING, example="success"),
+                        'balance': openapi.Schema(type=openapi.TYPE_NUMBER, example=150.00),
+                    }
+                )
+            ),
+            400: openapi.Response(
+                description="Ошибка валидации",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'status': openapi.Schema(type=openapi.TYPE_STRING, example="error"),
+                        'message': openapi.Schema(type=openapi.TYPE_STRING, example="Сумма пополнения должна быть положительной"),
+                    }
+                )
+            ),
+            401: openapi.Response(
+                description="Неавторизованный запрос",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(type=openapi.TYPE_STRING, example="Учетные данные не были предоставлены."),
+                    }
+                )
+            ),
+        }
+    )
     def post(self, request: Request) -> Response:
         """
         Пополнить баланс пользователя.
@@ -65,12 +117,43 @@ class WalletDepositView(APIView):
 class WalletWithdrawView(APIView):
     """
     API endpoint для списания средств с баланса кошелька пользователя.
-
-    Методы:
-    - post: Принимает сумму для списания и уменьшает баланс пользователя.
     """
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        request_body=TransactionSerializer,
+        responses={
+            200: openapi.Response(
+                description="Успешное списание средств",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'status': openapi.Schema(type=openapi.TYPE_STRING, example="success"),
+                        'balance': openapi.Schema(type=openapi.TYPE_NUMBER, example=50.00),
+                    }
+                )
+            ),
+            400: openapi.Response(
+                description="Ошибка валидации или недостаточно средств",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'status': openapi.Schema(type=openapi.TYPE_STRING, example="error"),
+                        'message': openapi.Schema(type=openapi.TYPE_STRING, example="Недостаточно средств на счете"),
+                    }
+                )
+            ),
+            401: openapi.Response(
+                description="Неавторизованный запрос",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(type=openapi.TYPE_STRING, example="Учетные данные не были предоставлены."),
+                    }
+                )
+            ),
+        }
+    )
     def post(self, request: Request) -> Response:
         """
         Списать средства с баланса пользователя.
@@ -96,12 +179,43 @@ class WalletWithdrawView(APIView):
 class WalletRefundView(APIView):
     """
     API endpoint для возврата средств на баланс кошелька пользователя.
-
-    Методы:
-    - post: Принимает сумму для возврата и добавляет ее к балансу пользователя.
     """
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        request_body=TransactionSerializer,
+        responses={
+            200: openapi.Response(
+                description="Успешный возврат средств",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'status': openapi.Schema(type=openapi.TYPE_STRING, example="success"),
+                        'balance': openapi.Schema(type=openapi.TYPE_NUMBER, example=150.00),
+                    }
+                )
+            ),
+            400: openapi.Response(
+                description="Ошибка валидации",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'status': openapi.Schema(type=openapi.TYPE_STRING, example="error"),
+                        'message': openapi.Schema(type=openapi.TYPE_STRING, example="Сумма возврата должна быть положительной"),
+                    }
+                )
+            ),
+            401: openapi.Response(
+                description="Неавторизованный запрос",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(type=openapi.TYPE_STRING, example="Учетные данные не были предоставлены."),
+                    }
+                )
+            ),
+        }
+    )
     def post(self, request: Request) -> Response:
         """
         Вернуть средства на баланс пользователя.

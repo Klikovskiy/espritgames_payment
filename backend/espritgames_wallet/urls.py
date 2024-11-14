@@ -9,7 +9,7 @@ from wallet.views import UserBalanceView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeRedirectView.as_view(), name='home'),
-    path('api/wallet/', include('apps.wallet.urls')),
+    path('api/', include('apps.wallet.urls')),
     path('balance/', UserBalanceView.as_view(), name='balance-view'),
     path('auth/', include('user_auth.urls')),
 ]

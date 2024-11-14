@@ -35,7 +35,7 @@
 ### Для локальных тестов можно использовать Docker:
 1. Переходим в папку `cd deploy/docker/`
 2. Собираем: `docker-compose -f docker-compose.yml build`
-3. Запускам: `docker-compose -f docker-compose.yml up -d`
+3. Запускаем: `docker-compose -f docker-compose.yml up -d`
 4. Подключаемся к контейнеру Django: `docker exec -it <container_id_or_name> /bin/bash`
 5. Запускаем процедуру создания супер пользователя `python backend/manage.py createsuperuser`
 
